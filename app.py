@@ -1,4 +1,3 @@
-from os import getenv
 from flask import Flask
 from flask_httpauth import HTTPTokenAuth
 from flask_cors import CORS
