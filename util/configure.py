@@ -1,5 +1,5 @@
 from os import getenv
-from werkzeug.exceptions import HTTPException, Unauthorized, default_exceptions, BadRequest
+from werkzeug.exceptions import HTTPException, Unauthorized, default_exceptions
 
 from util.helpers import respond_with
 
@@ -10,13 +10,13 @@ class Configure(object):
         self.auth = auth
 
         if self.app is not None:
-            self.register_handlers()
+            self._register_handlers()
 
         if self.auth is not None:
             self.auth.verify_token_callback = self._verify_token
             self.auth.auth_error_callback = self._auth_error
 
-    def register_handlers(self):
+    def _register_handlers(self):
         """
         Hook error-handler to exceptions
         :return:
@@ -31,6 +31,7 @@ class Configure(object):
         :return:
         """
         http_code = 500
+
         if isinstance(exception, HTTPException):
             http_code = exception.code
 
@@ -42,9 +43,9 @@ class Configure(object):
     def _auth_error(self):
         """
         Raise auth-exception
-        :return:
+        :return: Unauthorized
         """
-        return self._handle_exception(Unauthorized())
+        raise Unauthorized()
 
     def _verify_token(self, token):
         """
